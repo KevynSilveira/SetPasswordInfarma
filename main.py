@@ -32,7 +32,7 @@ def update_db(IdLogin): # Faz o update
     global cursor # Pega o cursor global
 
     try:
-        query_update =f"update usuar set Senha_Hash = '251774b06c4954385a8ca96bb7eb644d' where Isn = {code}"
+        query_update =f"update usuar set Senha_Hash = '251774b06c4954385a8ca96bb7eb644d' where Isn = {IdLogin}"
 
         cursor.execute(query_update) # Executa a query
         conn.commit() # Confirma o update
@@ -48,14 +48,16 @@ def update_db(IdLogin): # Faz o update
 def execute():
     try:
         code = entry_code.get()
-        if code != "":
+        if code:
+            print(code)
             access_db()
             update_db(code)
             close_db()
         else:
             messagebox.showerror("ATENÇÃO", "Preencha todos os campos!")
-    except:
-        messagebox.showerror("ATENÇÃO", "Preencha todos os campos!")
+    except Exception as e:
+        error_message = f"Ocorreu um erro: {str(e)}"
+        messagebox.showerror("ERRO", error_message)
 
 
 frame = ctk.CTk()
@@ -73,10 +75,10 @@ label_set_password.configure(font=("arial", 14))
 label_set_password.place(x=50, y=65)
 
 entry_code = ctk.CTkEntry(master=frame, width=200, height=30)
-entry_code.configure(font=("arial", 10))
+entry_code.configure(font=("arial", 12), justify="center")
 entry_code.place(x=25, y=90)
 
-button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30, fg_color="dark grey", text_color="black", hover_color="gray")
+button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30, fg_color="dark grey", text_color="black", hover_color="gray", command=execute)
 button_execute.configure(font=("arial", 14))
 button_execute.place(x=50, y=160)
 
