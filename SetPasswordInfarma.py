@@ -51,7 +51,9 @@ def execute():
         if code:
             print(code)
             access_db()
-            update_db(code)
+            rows_affected = update_db(code)
+            if rows_affected == 0:
+                messagebox.showerror("ATENÇÃO", "Digite um id válido.")
             close_db()
         else:
             messagebox.showerror("ATENÇÃO", "Preencha todos os campos!")
