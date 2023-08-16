@@ -1,5 +1,4 @@
 import customtkinter as ctk
-import tkinter as tk
 import pyodbc
 from tkinter import messagebox
 from customtkinter import set_appearance_mode
@@ -9,8 +8,8 @@ def access_db(): # Acessa o banco de dados
 
     try:
         # Credenciais do banco de dados
-        server = "192.168.64.5"
-        database = "DMD"
+        server = ""
+        database = ""
         username = ""
         password = ""
 
@@ -29,11 +28,11 @@ def close_db(): # Fecha a conexão com o banco de dados.
     if conn is not None:
         conn.close()
 
-def update_db(): # Faz o update
+def update_db(IdLogin): # Faz o update
     global cursor # Pega o cursor global
 
     try:
-        query_update =""
+        query_update =f"update usuar set Senha_Hash = '251774b06c4954385a8ca96bb7eb644d' where Isn = {code}"
 
         cursor.execute(query_update) # Executa a query
         conn.commit() # Confirma o update
@@ -48,11 +47,16 @@ def update_db(): # Faz o update
 
 def execute():
     try:
-        access_db()
-        update_db()
-        close_db()
+        code = entry_code.get()
+        if code != "":
+            access_db()
+            update_db(code)
+            close_db()
+        else:
+            messagebox.showerror("ATENÇÃO", "Preencha todos os campos!")
     except:
         messagebox.showerror("ATENÇÃO", "Preencha todos os campos!")
+
 
 frame = ctk.CTk()
 frame.geometry("250x200")
@@ -75,6 +79,5 @@ entry_code.place(x=25, y=90)
 button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30, fg_color="dark grey", text_color="black", hover_color="gray")
 button_execute.configure(font=("arial", 14))
 button_execute.place(x=50, y=160)
-
 
 frame.mainloop()
